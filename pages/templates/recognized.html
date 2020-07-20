@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta>
+  <title>elvis: {{.Artist}}- {{.Title}}</title>
+</head>
+
+<body>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap");
+
+    body {
+      padding: 0;
+      margin: 0;
+      background-color: #5f5f5ffa;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: Source Sans Pro, sans-serif
+    }
+
+    .icon {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      width: 100%;
+      height: 100%
+    }
+
+    .button {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+      align-items: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      cursor: pointer;
+      height: 45px;
+      padding: .5em .75em;
+      background-color: #000;
+      border-radius: .25em;
+      color: #fff;
+      font-size: 1.25em;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 2px 5px 1px rgba(0, 0, 0, .25);
+      transition: .25s
+    }
+
+    .button:hover {
+      box-shadow: none
+    }
+
+    .button.spotify {
+      background-color: #1db954;
+      color: #000
+    }
+
+    .button.youtube {
+      background-color: red
+    }
+
+    .button__icon {
+      -ms-flex: 0 0 1.5em;
+      flex: 0 0 1.5em;
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 1em;
+      width: 1.5em;
+      height: 1.5em
+    }
+
+    .round-button {
+      display: block
+    }
+
+    .track {
+      padding: 2em;
+      text-align: center
+    }
+
+    .track__cover {
+      -ms-flex: 0 0 auto;
+      flex: 0 0 auto;
+      position: relative;
+      text-align: center;
+      overflow: hidden
+    }
+
+    .track__overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      z-index: 0;
+      transform: translateX(-50%) translateY(-50%) scale(1.006);
+      width: 100%;
+      height: 100%;
+      filter: blur(8px) brightness(.7);
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: 50%
+    }
+
+    .track__info {
+      position: relative;
+      margin-bottom: 3vh;
+      z-index: 1
+    }
+
+    .track__art {
+      display: block;
+      width: 100%;
+      max-width: 480px;
+      margin: 1vh auto 4vh;
+      box-shadow: 0 5px 25px 10px rgba(0, 0, 0, .2)
+    }
+
+    .track__controls {
+      position: relative;
+      margin: 0 auto;
+      padding: 0;
+      max-width: 480px;
+      list-style: none
+    }
+
+    .track__controls li:not(:last-child) {
+      margin-bottom: 1em
+    }
+
+    .track-title {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0;
+      padding: .25em;
+      font-size: 1.5em;
+      color: #fff;
+      background-color: rgba(0, 0, 0, .6)
+    }
+  </style>
+  <section class="track">
+    <div class="track__overlay"
+      style="background-image:url(https://images.genius.com/60712a7b6cbcc792502d877fb9a170c5.1000x1000x1.jpg);">
+    </div>
+    <section class="track__info"><img class="track__art"
+        src="https://images.genius.com/60712a7b6cbcc792502d877fb9a170c5.1000x1000x1.jpg" alt="" role="presentation" />
+      <h2 class="track-title">{{.Artist}} - {{.Title}}
+      </h2>
+    </section>
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0px" height="0px">
+      <symbol id="heart" viewBox="0 -28 512 512">
+        <path
+          d="M471.383 44.578C444.879 15.832 408.512 0 368.973 0c-29.555 0-56.621 9.344-80.45 27.77C276.5 37.07 265.605 48.45 256 61.73c-9.602-13.277-20.5-24.66-32.527-33.96C199.648 9.344 172.582 0 143.027 0c-39.539 0-75.91 15.832-102.414 44.578C14.426 72.988 0 111.801 0 153.871c0 43.3 16.137 82.938 50.781 124.742 30.992 37.395 75.535 75.356 127.117 119.313 17.614 15.012 37.579 32.027 58.309 50.152A30.023 30.023 0 00256 455.516c7.285 0 14.316-2.641 19.785-7.43 20.73-18.129 40.707-35.152 58.328-50.172 51.575-43.95 96.117-81.906 127.11-119.305C495.867 236.81 512 197.172 512 153.867c0-42.066-14.426-80.879-40.617-109.289zm0 0" />
+      </symbol>
+      <symbol id="spotify" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" fill="#4caf50" r="12" />
+        <g fill="#212121">
+          <path
+            d="M16.872 17.656v.001c-.203 0-.329-.063-.518-.174-3.019-1.82-6.532-1.896-10.002-1.185-.189.049-.436.126-.576.126a.754.754 0 01-.765-.765c0-.499.295-.736.659-.813 3.963-.875 8.013-.798 11.467 1.268.295.189.47.358.47.798a.732.732 0 01-.735.744zM18.175 14.483h-.001c-.252 0-.421-.111-.596-.203-3.025-1.79-7.533-2.512-11.545-1.423-.232.063-.358.126-.576.126-.518 0-.938-.421-.938-.938s.252-.861.75-1.001c1.345-.378 2.719-.659 4.732-.659 3.14 0 6.174.779 8.565 2.202.392.232.547.533.547.953a.938.938 0 01-.938.943zM4.548 6.998c1.703-.499 3.61-.735 5.686-.735 3.532 0 7.234.735 9.939 2.313.378.218.624.518.624 1.093 0 .658-.533 1.127-1.122 1.127l-.001-.001c-.252 0-.407-.063-.625-.189C15.605 8.55 9.444 8.057 5.458 9.17c-.175.048-.393.125-.625.125-.639 0-1.127-.499-1.127-1.142 0-.657.407-1.029.842-1.155z" />
+        </g>
+      </symbol>
+      <symbol id="youtube" viewBox="0 -77 512.002 512">
+        <path
+          d="M501.453 56.094c-5.902-21.934-23.195-39.223-45.125-45.13C416.262 0 255.996 0 255.996 0S95.734 0 55.668 10.547C34.16 16.449 16.445 34.164 10.543 56.094 0 96.156 0 179.242 0 179.242s0 83.504 10.543 123.149c5.906 21.93 23.195 39.222 45.129 45.129C96.156 358.484 256 358.484 256 358.484s160.262 0 200.328-10.546c21.934-5.903 39.223-23.196 45.129-45.125C512 262.745 512 179.663 512 179.663s.422-83.508-10.547-123.57zm0 0"
+          fill="#fff" />
+        <path d="M204.969 256l133.27-76.758-133.27-76.758zm0 0" fill="red" />
+      </symbol>
+    </svg>
+    <ul class="track__controls">
+      <li><a class="button" href="{{.Lyrics}}">Get lyrics</a>
+      </li>
+      <li><a class="button spotify" href="{{.Spotify}}"><span class="button__icon">
+            <svg class="icon">
+              <use x="0" y="0" xlink:href="#spotify"></use>
+            </svg></span>Spotify</a>
+      </li>
+      <li><a class="button youtube" href="{{.YouTube}}"><span class="button__icon">
+            <svg class="icon">
+              <use x="0" y="0" xlink:href="#youtube"></use>
+            </svg></span>Youtube</a>
+      </li>
+    </ul>
+  </section>
+</body>

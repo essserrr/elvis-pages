@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
+  <title>Elvis bot</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+
+    body {
+      padding: 0;
+      margin: 0;
+      background-color: #000;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Source Sans Pro', sans-serif;
+    }
+
+    /* Basic blocks */
+    .icon {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Generated blocks */
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      height: 40px;
+      width: 100%;
+      padding: 0.5em 0.75em;
+      background-color: #000;
+      border-radius: 0.25em;
+      color: #fff;
+      font-size: 1.25em;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.25);
+      transition: 0.25s;
+      border: none;
+    }
+
+    .button:hover {
+      box-shadow: none;
+    }
+
+    .button.spotify {
+      background-color: #1db954;
+      color: #000;
+    }
+
+    .button.youtube {
+      background-color: #f00;
+    }
+
+    .button__icon {
+      flex: 0 0 1.5em;
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 1em;
+      width: 1.5em;
+      height: 1.5em;
+    }
+
+    .round-button {
+      display: block;
+    }
+
+    .track {
+      text-align: center;
+    }
+
+    .track__cover {
+      flex: 0 0 auto;
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .track__info {
+      position: relative;
+      margin-bottom: 4em;
+      z-index: 1;
+    }
+
+    .track__art {
+      display: block;
+      width: 100%;
+      margin: 0 auto 3em;
+      box-shadow: 0 5px 25px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .track__controls {
+      position: relative;
+      margin: 0 auto;
+      padding: 0;
+      list-style: none;
+    }
+
+    .track__controls li {
+      margin-bottom: 1em;
+    }
+
+    .track__lyrics {
+      display: none;
+      margin: 0 auto;
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.45);
+      padding: 1em;
+      font-size: 1.5em;
+      word-break: break-word;
+    }
+
+    .track__lyrics.visible {
+      display: block;
+    }
+
+    .tracks {
+      position: relative;
+      display: block;
+      padding: 64px 0;
+    }
+
+    .tracks__covers {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .tracks__covers .slick-list,
+    .tracks__covers .slick-track {
+      height: 100%;
+    }
+
+    .tracks__cover {
+      height: 100%;
+      width: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      filter: brightness(0.5) blur(5px);
+      transform: scale(1.1);
+      transform-origin: center;
+    }
+
+    .tracks__list {
+      position: relative;
+      z-index: 2;
+    }
+
+    .tracks__list .slick-dots {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 16px;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      margin: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .tracks__list .slick-dots li {
+      flex: 1 1 auto;
+    }
+
+    .tracks__list .slick-dots li:not(:last-child) {
+      margin-right: 4px;
+    }
+
+    .tracks__list .slick-dots button {
+      background: #fff;
+      border: none;
+      border-radius: 2px;
+      font-size: 8px;
+      width: 100%;
+      height: 4px;
+      cursor: pointer;
+      opacity: 0.3;
+      transition: 0.2s;
+      color: transparent;
+    }
+
+    .tracks__list .slick-dots .slick-active button {
+      opacity: 1;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .track-title {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0;
+      padding: 0.25em;
+      font-size: 1.5em;
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .container {
+      display: block;
+      max-width: 480px;
+      padding: 0 32px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      .tracks {
+        padding: 52px 0 32px;
+      }
+
+      .track__art {
+        margin: 0 auto 2em;
+      }
+
+      .track__info {
+        margin-bottom: 3em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="tracks">
+    <div class="tracks__covers js-covers">
+      {{range .}}
+      <div class="tracks__cover" style="background-image: url({{.CoverURL}})">
+      </div>
+      {{end}}
+    </div>
+    <div class="tracks__list container js-tracks">
+      {{range .}}
+      <section class="track js-track">
+        <div class="track__overlay" style="background-image:url({{.CoverURL}});">
+        </div>
+        <section class="track__info"><img class="track__art" src="{{.CoverURL}}" alt="" role="presentation" />
+          <h2 class="track-title">{{.Artist}} - {{.Title}}
+          </h2>
+        </section>
+        <ul class="track__controls">
+          <li>
+            <button class="button js-lyrics" href="#" data-id={{.ID}}>Get lyrics
+            </button>
+          </li>
+          <li><a class="button spotify" href="{{.Spotify}}"><span class="button__icon">
+                <svg class="icon">
+                  <use x="0" y="0" xlink:href="assets/svg/svg.svg#spotify"></use>
+                </svg></span>Spotify</a>
+          </li>
+          <li><a class="button youtube" href="{{.YouTube}}"><span class="button__icon">
+                <svg class="icon">
+                  <use x="0" y="0" xlink:href="assets/svg/svg.svg#youtube"></use>
+                </svg></span>Youtube</a>
+          </li>
+          <p class="track__lyrics js-lyrics-wrapper">
+          </p>
+        </ul>
+      </section>
+      {{end}}
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@1.11.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-migrate@1.2.1/dist/jquery-migrate.min.js"></script>
+  <script src="https:/cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script>
+    function loadLyrics() {
+
+    }
+
+    $(document).ready(() => {
+      const $lyricsButtons = $('.js-lyrics')
+      const $covers = $('.js-covers')
+      const $tracks = $('.js-tracks')
+
+      $covers.slick({
+        arrows: false,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        fade: true,
+        draggable: false,
+      })
+      $tracks.slick({
+        arrows: false,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        asNavFor: '.js-covers',
+        fade: true,
+        dots: true,
+      })
+      $lyricsButtons.on('click', ({ target }) => {
+        const $button = $(target)
+        const $track = $button.parents('.js-track')
+        const $lyricsWrapper = $track.find('.js-lyrics-wrapper')
+        const { id } = target.dataset
+
+        fetch("/lyrics/" + id)
+          .then(res => res.json())
+          .then(res => {
+            $lyricsWrapper.addClass('visible')
+            $lyricsWrapper.text(res)
+          })
+      })
+    })
+  </script>
+</body>
